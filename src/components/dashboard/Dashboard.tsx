@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import type { Order, Client, FinancialStats } from "../../types";
-import { fmt, fmtDate } from "../../utils/formatters";
+import { fmt } from "../../utils/formatters";
 import { ShippingBadge, PaymentStatus } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import "./Dashboard.css";
