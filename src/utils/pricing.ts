@@ -67,5 +67,5 @@ export function suggestedMargin(
   marginType: "fixed" | "double",
   fixedAmount = 150,
 ): number {
-  return marginType === "double" ? purchasePrice * 2 : fixedAmount;
+  return marginType === "double" ? purchasePrice : fixedAmount;
 }
