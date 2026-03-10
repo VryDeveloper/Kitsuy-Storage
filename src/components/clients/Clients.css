@@ -1,0 +1,106 @@
+/* ─────────────────────────────────────────────────────────────
+   KitsuyStore — Clients
+───────────────────────────────────────────────────────────── */
+
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.client-card {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  transition: all 0.2s;
+}
+.client-card:hover {
+  border-color: var(--pink);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.client-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.client-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--text);
+}
+.client-phone {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 2px;
+}
+.client-address {
+  color: var(--text-muted);
+  font-size: 0.77rem;
+  margin-bottom: 10px;
+}
+.client-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.client-stat-label {
+  font-size: 0.66rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-light);
+}
+.client-stat-value {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+/* ── View modal ── */
+.view-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.order-history-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.order-history-item {
+  background: var(--pink-pale);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+.order-history-item:last-child { margin-bottom: 0; }
+
+.order-history-name {
+  font-weight: 700;
+  font-size: 0.87rem;
+}
+.order-history-date {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+.order-history-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}

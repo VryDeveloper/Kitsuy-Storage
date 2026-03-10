@@ -1,0 +1,204 @@
+/* ─────────────────────────────────────────────────────────────
+   KitsuyStore — UI Components (Button, Badge, Form, StatCard)
+───────────────────────────────────────────────────────────── */
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 9px 18px;
+  font-family: var(--font-body);
+  font-size: 0.83rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow);
+}
+
+.btn-ghost {
+  background: var(--pink-pale);
+  color: var(--pink-dark);
+  border: 2px solid var(--border-md);
+}
+.btn-ghost:hover {
+  background: var(--pink-light);
+  border-color: var(--pink);
+}
+
+.btn-danger {
+  background: #fef2f2;
+  color: var(--red);
+  border: 2px solid #fecaca;
+}
+.btn-danger:hover { background: #fee2e2; }
+
+.btn-success {
+  background: var(--green-bg);
+  color: var(--green);
+  border: 2px solid var(--green-border);
+}
+.btn-success:hover { background: #dcfce7; }
+
+.btn-sm { padding: 5px 11px; font-size: 0.75rem; }
+
+/* ── Badge ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 0.69rem;
+  font-weight: 700;
+  border: 1.5px solid currentColor;
+  white-space: nowrap;
+}
+.badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+/* ── Form ── */
+.form-group { display: grid; gap: 14px; }
+.form-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-field { display: flex; flex-direction: column; gap: 6px; }
+
+label {
+  font-size: 0.73rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--pink-dark);
+}
+
+input, select, textarea {
+  background: #fff;
+  border: 2px solid var(--border-md);
+  border-radius: var(--radius-pill);
+  padding: 10px 16px;
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.12);
+}
+textarea { border-radius: 12px; resize: vertical; }
+select   { border-radius: var(--radius-pill); }
+select option { background: #fff; }
+
+/* ── Checkbox row ── */
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--pink-pale);
+  border: 2px solid var(--border-md);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  margin-bottom: 7px;
+}
+.checkbox-row:last-of-type { margin-bottom: 0; }
+.checkbox-row:hover {
+  border-color: var(--pink);
+  background: var(--pink-light);
+}
+.checkbox-row input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--pink);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Payment box ── */
+.payment-box {
+  background: var(--pink-pale);
+  border: 2px solid var(--border-md);
+  border-radius: 12px;
+  padding: 16px;
+}
+.payment-box-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--pink-dark);
+  margin-bottom: 12px;
+}
+
+/* ── Stat card ── */
+.stat-card {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.stat-card-icon {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  font-size: 1.7rem;
+  opacity: 0.15;
+}
+.stat-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+  margin-bottom: 6px;
+}
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--text);
+  line-height: 1;
+}
+.stat-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.stat-card.pink .stat-value {
+  background: linear-gradient(135deg, var(--pink), var(--red));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.stat-card.green .stat-value { color: var(--green); }
+.stat-card.red   .stat-value { color: var(--red); }
+
+@media (max-width: 520px) {
+  .form-row { grid-template-columns: 1fr; }
+}

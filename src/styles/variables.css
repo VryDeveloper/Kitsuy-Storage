@@ -1,0 +1,51 @@
+/* ─────────────────────────────────────────────────────────────
+   KitsuyStore — CSS Variables (Pink Theme)
+───────────────────────────────────────────────────────────── */
+
+:root {
+  /* Paleta principal */
+  --pink:         #ec4899;
+  --pink-light:   #fbcfe8;
+  --pink-pale:    #fdf2f8;
+  --pink-dark:    #db2777;
+
+  /* Acento */
+  --red:          #ef4444;
+  --red-dark:     #dc2626;
+
+  /* Fundo */
+  --bg:           #ffffff;
+  --bg-subtle:    #fdf2f8;
+  --card:         #ffffff;
+
+  /* Bordas */
+  --border:       #fce7f3;
+  --border-md:    #fbcfe8;
+
+  /* Texto */
+  --text:         #1f2937;
+  --text-muted:   #6b7280;
+  --text-light:   #9ca3af;
+
+  /* Semânticas */
+  --green:        #10b981;
+  --green-bg:     #f0fdf4;
+  --green-border: #bbf7d0;
+  --yellow:       #f59e0b;
+  --purple:       #8b5cf6;
+  --blue:         #3b82f6;
+
+  /* Forma */
+  --radius:       14px;
+  --radius-sm:    8px;
+  --radius-pill:  30px;
+
+  /* Sombras */
+  --shadow:       0 4px 25px rgba(236, 72, 153, 0.12);
+  --shadow-lg:    0 8px 40px rgba(236, 72, 153, 0.18);
+  --glow:         0 0 20px rgba(236, 72, 153, 0.35);
+
+  /* Tipografia */
+  --font-display: 'Fredoka One', cursive;
+  --font-body:    'Nunito', sans-serif;
+}

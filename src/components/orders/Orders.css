@@ -1,0 +1,123 @@
+/* ─────────────────────────────────────────────────────────────
+   KitsuyStore — Orders
+───────────────────────────────────────────────────────────── */
+
+.order-product-name {
+  font-weight: 700;
+  max-width: 180px;
+}
+
+.order-link {
+  color: var(--pink);
+  font-size: 0.71rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 2px;
+  transition: color 0.15s;
+}
+.order-link:hover { color: var(--pink-dark); }
+
+/* ── Pricing Calculator ── */
+.pricing-box {
+  background: var(--pink-pale);
+  border: 2px solid var(--border-md);
+  border-radius: 14px;
+  padding: 18px;
+}
+.pricing-box-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.proxy-fees-row {
+  background: #fff;
+  border: 1.5px solid var(--border-md);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.proxy-fee-item { display: flex; justify-content: space-between; align-items: center; }
+.proxy-fee-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+.proxy-fee-value { font-size: 0.82rem; font-weight: 700; color: var(--pink-dark); }
+
+.shipping-presets { display: flex; gap: 7px; flex-wrap: wrap; }
+.preset-btn {
+  background: #fff;
+  border: 2px solid var(--border-md);
+  border-radius: 20px;
+  padding: 5px 13px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.preset-btn:hover { border-color: var(--pink); color: var(--pink); }
+.preset-btn.active {
+  background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+  border-color: var(--pink);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(236,72,153,.3);
+}
+
+.margin-toggle { display: flex; gap: 7px; }
+.toggle-btn {
+  flex: 1;
+  background: #fff;
+  border: 2px solid var(--border-md);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: center;
+}
+.toggle-btn:hover { border-color: var(--pink); color: var(--pink); }
+.toggle-btn.active {
+  background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+  border-color: var(--pink);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(236,72,153,.3);
+}
+
+.pricing-breakdown {
+  background: #fff;
+  border: 2px solid var(--border-md);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.breakdown-row span:last-child { font-weight: 600; color: var(--text); }
+.breakdown-subtotal {
+  border-top: 1.5px dashed var(--border-md);
+  padding-top: 6px;
+  margin-top: 2px;
+}
+.breakdown-subtotal span { color: var(--text) !important; font-weight: 700 !important; }
+.breakdown-discount span:last-child { color: var(--red) !important; }
+.breakdown-total {
+  border-top: 2px solid var(--pink-light);
+  padding-top: 8px;
+  margin-top: 4px;
+  font-size: 0.95rem !important;
+}
+.breakdown-total span { color: var(--pink-dark) !important; font-weight: 800 !important; font-family: var(--font-display); }
+.breakdown-profit { margin-top: 2px; }
+.breakdown-profit span:first-child { color: var(--text) !important; font-weight: 700 !important; }

@@ -1,0 +1,209 @@
+/* ─────────────────────────────────────────────────────────────
+   KitsuyStore — Global Styles
+───────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;500;600;700;800&display=swap');
+@import './variables.css';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+input, select, textarea {
+  font-family: var(--font-body);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar        { width: 7px; height: 7px; }
+::-webkit-scrollbar-track  { background: #fff; }
+::-webkit-scrollbar-thumb  { background: var(--pink); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--pink-dark); }
+html { scrollbar-width: thin; scrollbar-color: var(--pink) white; }
+
+/* ── Layout utilitários ── */
+.page-wrapper {
+  padding: 28px;
+  max-width: 1380px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  color: var(--text);
+}
+
+.page-title span {
+  background: linear-gradient(135deg, var(--pink), var(--red));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Grids ── */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+@media (max-width: 900px) {
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 580px) {
+  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .page-wrapper { padding: 14px; }
+}
+
+/* ── Card base ── */
+.card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+/* ── Table wrapper ── */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.855rem;
+}
+
+thead {
+  background: var(--pink-pale);
+}
+
+th {
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 0.67rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--pink-dark);
+}
+
+td {
+  padding: 13px 15px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr { transition: background 0.15s; }
+tbody tr:hover { background: var(--pink-pale); }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+}
+
+.empty-state .empty-icon {
+  font-size: 2.8rem;
+  display: block;
+  margin-bottom: 10px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.empty-state p {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* ── Divider ── */
+.divider {
+  height: 1.5px;
+  background: var(--border);
+  margin: 11px 0;
+}
+
+/* ── Filter row ── */
+.filter-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+/* ── Search wrapper ── */
+.search-wrapper {
+  position: relative;
+  flex: 1;
+}
+.search-wrapper .search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--pink);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+.search-wrapper input {
+  padding-left: 36px;
+}
+
+/* ── Actions group ── */
+.actions-group {
+  display: flex;
+  gap: 5px;
+}
+
+/* ── Profit pill ── */
+.profit-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+@media (max-width: 580px) {
+  .filter-row { flex-direction: column; }
+}
