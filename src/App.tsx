@@ -6,7 +6,10 @@ import { useState, useMemo } from "react";
 import type { Order, Client, FinancialStats } from "./types";
 import { useOrders }  from "./hooks/useOrders";
 import { useClients } from "./hooks/useClients";
+import { useAuth }    from "./hooks/useAuth";
+import type { AuthState } from "./hooks/useAuth";
 
+import { AuthGuard }       from "./components/auth/AuthGuard";
 import { Header }          from "./components/layout/Header";
 import { Dashboard }       from "./components/dashboard/Dashboard";
 import { OrdersTab }       from "./components/orders/OrdersTab";
@@ -20,13 +23,15 @@ import "./components/ui/UI.css";
 import "./App.css";
 
 type Tab = "dashboard" | "orders" | "clients";
-
 type OrderModalState  = { mode: "add" } | { mode: "edit"; data: Order };
 type ClientModalState = { mode: "add" } | { mode: "edit"; data: Client };
 
-export default function App() {
+// ── AppInner recebe auth como prop — sem chamar useAuth() de novo ──
+function AppInner({ auth }: { auth: AuthState }) {
   const { orders, addOrder, updateOrder, deleteOrder, getOrdersByClient } = useOrders();
   const { clients, addClient, updateClient, deleteClient } = useClients();
+
+  const userName = auth.user?.user_metadata?.name as string | undefined;
 
   const [tab, setTab]                 = useState<Tab>("dashboard");
   const [orderModal, setOrderModal]   = useState<OrderModalState | null>(null);
@@ -37,7 +42,6 @@ export default function App() {
   const [shippingFilter, setShippingFilter] = useState("all");
   const [clientSearch,   setClientSearch]   = useState("");
 
-  // ── Handlers ──────────────────────────────────────────────
   const handleSaveOrder = (data: Order | Omit<Order, "id" | "createdAt">) => {
     if ("id" in data) updateOrder(data as Order);
     else addOrder(data as Omit<Order, "id" | "createdAt">);
@@ -50,7 +54,6 @@ export default function App() {
     setClientModal(null);
   };
 
-  // ── Filtered lists ─────────────────────────────────────────
   const filteredOrders = useMemo(() => {
     const s = orderSearch.toLowerCase();
     return orders.filter(o => {
@@ -70,23 +73,22 @@ export default function App() {
     [clients, clientSearch]
   );
 
-  // ── Financial stats ────────────────────────────────────────
   const stats = useMemo<FinancialStats>(() => {
     const totalRevenue  = orders.reduce((s, o) => s + (parseFloat(o.salePrice) || 0), 0);
     const totalCost     = orders.reduce((s, o) => s + (parseFloat(o.purchasePrice) || 0), 0);
-    const totalProfit2  = orders.reduce((s, o) => s + Math.max(0, (parseFloat(o.marginValue) || 0) - (parseFloat(o.discountValue) || 0)), 0);
+    const totalProfit   = orders.reduce((s, o) => s + Math.max(0, (parseFloat(o.marginValue) || 0) - (parseFloat(o.discountValue) || 0)), 0);
     const totalReceived = orders.reduce((s, o) => {
       const v = parseFloat(o.salePrice) || 0;
       if (o.paymentMode === "full") return s + (o.depositPaid ? v : 0);
       return s + (o.depositPaid ? v * 0.5 : 0) + (o.finalPaymentPaid ? v * 0.5 : 0);
     }, 0);
     return {
-      totalOrders:   orders.length,
+      totalOrders: orders.length,
       totalRevenue,
       totalCost,
-      totalProfit:   totalProfit2,
+      totalProfit,
       totalReceived,
-      totalPending:  totalRevenue - totalReceived,
+      totalPending: totalRevenue - totalReceived,
     };
   }, [orders]);
 
@@ -97,25 +99,19 @@ export default function App() {
         onTabChange={setTab}
         orderCount={orders.length}
         clientCount={clients.length}
+        user={auth.user!}
+        onSignOut={auth.signOut}
       />
 
       <main className="page-wrapper">
         {tab === "dashboard" && (
-          <Dashboard
-            orders={orders}
-            clients={clients}
-            stats={stats}
-            onGoToOrders={() => setTab("orders")}
-          />
+          <Dashboard userName={userName} orders={orders} clients={clients} stats={stats} onGoToOrders={() => setTab("orders")} />
         )}
         {tab === "orders" && (
           <OrdersTab
-            orders={filteredOrders}
-            clients={clients}
-            search={orderSearch}
-            setSearch={setOrderSearch}
-            shippingFilter={shippingFilter}
-            setShippingFilter={setShippingFilter}
+            orders={filteredOrders} clients={clients}
+            search={orderSearch} setSearch={setOrderSearch}
+            shippingFilter={shippingFilter} setShippingFilter={setShippingFilter}
             onAdd={() => setOrderModal({ mode: "add" })}
             onEdit={o => setOrderModal({ mode: "edit", data: o })}
             onDelete={deleteOrder}
@@ -123,10 +119,8 @@ export default function App() {
         )}
         {tab === "clients" && (
           <ClientsTab
-            clients={filteredClients}
-            orders={orders}
-            search={clientSearch}
-            setSearch={setClientSearch}
+            clients={filteredClients} orders={orders}
+            search={clientSearch} setSearch={setClientSearch}
             onAdd={() => setClientModal({ mode: "add" })}
             onEdit={c => setClientModal({ mode: "edit", data: c })}
             onDelete={deleteClient}
@@ -135,7 +129,6 @@ export default function App() {
         )}
       </main>
 
-      {/* Modals */}
       {orderModal && (
         <OrderModal
           mode={orderModal.mode}
@@ -165,5 +158,15 @@ export default function App() {
         />
       )}
     </div>
+  );
+}
+
+// ── App chama useAuth UMA vez e passa para baixo ──
+export default function App() {
+  const auth = useAuth();
+  return (
+    <AuthGuard auth={auth}>
+      <AppInner auth={auth} />
+    </AuthGuard>
   );
 }

@@ -63,3 +63,62 @@
   .header { padding: 0 14px; }
   .header-tab { padding: 6px 10px; font-size: 0.74rem; }
 }
+
+/* ── User area ── */
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.header-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--glow);
+}
+
+.header-email {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-signout {
+  background: none;
+  border: 2px solid var(--border-md);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-family: var(--font-body);
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.header-signout:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: #fef2f2;
+}
+
+@media (max-width: 700px) {
+  .header-email { display: none; }
+}
+@media (max-width: 520px) {
+  .header-user { gap: 6px; }
+  .header-signout { padding: 4px 8px; }
+}

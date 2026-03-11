@@ -13,9 +13,10 @@ interface DashboardProps {
   clients: Client[];
   stats: FinancialStats;
   onGoToOrders: () => void;
+  userName?: string;
 }
 
-export function Dashboard({ orders, clients, stats, onGoToOrders }: DashboardProps) {
+export function Dashboard({ orders, clients, stats, onGoToOrders, userName }: DashboardProps) {
   const recent    = [...orders].sort((a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
   const inTransit = orders.filter(o => ["ordered","in_transit"].includes(o.shippingStatus)).length;
   const arrived   = orders.filter(o => o.shippingStatus === "arrived_brazil").length;
@@ -31,7 +32,7 @@ export function Dashboard({ orders, clients, stats, onGoToOrders }: DashboardPro
   return (
     <div>
       <div className="dashboard-greeting">
-        <h1>Olá, KitsuyStore! 🌸</h1>
+        <h1>Olá, {userName} 🌸</h1>
         <p>Aqui está o resumo da sua loja</p>
       </div>
 

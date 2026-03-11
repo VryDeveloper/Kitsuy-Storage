@@ -2,15 +2,18 @@
 //  KitsuyStore — Header Component
 // ─────────────────────────────────────────────────────────────
 
+import type { User } from "../../services/auth";
 import "./Header.css";
 
 type Tab = "dashboard" | "orders" | "clients";
 
 interface HeaderProps {
-  activeTab: Tab;
-  onTabChange: (tab: Tab) => void;
-  orderCount: number;
-  clientCount: number;
+  activeTab:    Tab;
+  onTabChange:  (tab: Tab) => void;
+  orderCount:   number;
+  clientCount:  number;
+  user:         User;
+  onSignOut:    () => void;
 }
 
 const TABS: { id: Tab; emoji: string; label: (o: number, c: number) => string }[] = [
@@ -19,11 +22,14 @@ const TABS: { id: Tab; emoji: string; label: (o: number, c: number) => string }[
   { id: "clients",   emoji: "👤", label: (_,c) => `Clientes${c ? ` (${c})` : ""}` },
 ];
 
-export function Header({ activeTab, onTabChange, orderCount, clientCount }: HeaderProps) {
+export function Header({ activeTab, onTabChange, orderCount, clientCount, user, onSignOut }: HeaderProps) {
+  const email = user.email ? user.email : "Usuário";
+  const initials = email.slice(0, 2).toUpperCase();
+
   return (
     <header className="header">
       <div className="header-logo">
-        ✦ Kitsuys<em>tore</em>
+        ✦ Kitsuy<em>storage</em>
       </div>
       <nav className="header-tabs">
         {TABS.map((t) => (
@@ -36,6 +42,13 @@ export function Header({ activeTab, onTabChange, orderCount, clientCount }: Head
           </button>
         ))}
       </nav>
+      <div className="header-user">
+        <div className="header-avatar" title={email}>{initials}</div>
+        <span className="header-email">{email}</span>
+        <button className="header-signout" onClick={onSignOut} title="Sair">
+          Sair
+        </button>
+      </div>
     </header>
   );
 }
