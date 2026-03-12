@@ -14,6 +14,7 @@ import {
   PROXY_PERCENT,
 } from "../../utils/pricing";
 import { Button } from "../ui/Button";
+import { YenConverter } from "./YenConverter";
 import "./Orders.css";
 
 type OrderFormData = Omit<Order, "id" | "createdAt">;
@@ -85,10 +86,20 @@ export function OrderModal({ mode, data, clients, onSave, onClose }: OrderModalP
 
   return (
     <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="modal" style={{ maxWidth: 600 }}>
-        <div className="modal-title">
-          {mode === "add" ? "🌸 Novo Pedido" : "✏️ Editar Pedido"}
-        </div>
+      {/* Wrapper side-by-side: modal à esquerda, conversor à direita */}
+      <div style={{
+        display: "flex",
+        gap: 16,
+        alignItems: "flex-start",
+        width: "100%",
+        maxWidth: mode === "add" ? 940 : 600,
+        maxHeight: "92vh",
+      }}>
+        {/* Modal principal */}
+        <div className="modal" style={{ flex: 1, minWidth: 0 }}>
+          <div className="modal-title">
+            {mode === "add" ? "🌸 Novo Pedido" : "✏️ Editar Pedido"}
+          </div>
 
         <div className="form-group">
 
@@ -357,6 +368,14 @@ export function OrderModal({ mode, data, clients, onSave, onClose }: OrderModalP
             </Button>
           </div>
         </div>
+      </div>
+
+        {/* Conversor de Yen — só no modo "add" */}
+        {mode === "add" && (
+          <YenConverter
+            onUseValue={(brl) => set("purchasePrice")(brl)}
+          />
+        )}
       </div>
     </div>
   );

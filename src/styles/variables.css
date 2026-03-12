@@ -19,8 +19,9 @@
   --card:         #ffffff;
 
   /* Bordas */
-  --border:       #fce7f3;
+  --border:       #ec489a;
   --border-md:    #fbcfe8;
+  --border-px:    3px;
 
   /* Texto */
   --text:         #1f2937;
@@ -41,8 +42,8 @@
   --radius-pill:  30px;
 
   /* Sombras */
-  --shadow:       0 4px 25px rgba(236, 72, 153, 0.12);
-  --shadow-lg:    0 8px 40px rgba(236, 72, 153, 0.18);
+  --shadow:       0 2px 5px #ec489a;
+  --shadow-lg:    0 8px 40px rgba(236, 72, 154, 0.424);
   --glow:         0 0 20px rgba(236, 72, 153, 0.35);
 
   /* Tipografia */

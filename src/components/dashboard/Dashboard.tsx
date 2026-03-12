@@ -23,16 +23,16 @@ export function Dashboard({ orders, clients, stats, onGoToOrders, userName }: Da
   const delivered = orders.filter(o => o.shippingStatus === "delivered").length;
 
   const statCards = [
-    { label: "Pedidos Totais", value: stats.totalOrders,              sub: `${inTransit} em trânsito`, icon: "📦", cls: "pink" },
-    { label: "Receita Total",  value: fmt(stats.totalRevenue),        sub: "Valor de vendas",           icon: "💰", cls: "" },
-    { label: "Lucro Total",    value: fmt(stats.totalProfit),         sub: "Venda − Custo",             icon: "📈", cls: stats.totalProfit >= 0 ? "green" : "red" },
-    { label: "A Receber",      value: fmt(stats.totalPending),        sub: `Recebido: ${fmt(stats.totalReceived)}`, icon: "🎯", cls: "pink" },
+    { label: "Pedidos Totais", value: stats.totalOrders,              sub: `${inTransit} em trânsito`, icon: "", cls: "pink" },
+    { label: "Receita Total",  value: fmt(stats.totalRevenue),        sub: "Valor de vendas",           icon: "", cls: "" },
+    { label: "Lucro Total",    value: fmt(stats.totalProfit),         sub: "Venda − Custo",             icon: "", cls: stats.totalProfit >= 0 ? "green" : "red" },
+    { label: "A Receber",      value: fmt(stats.totalPending),        sub: `Recebido: ${fmt(stats.totalReceived)}`, icon: "", cls: "pink" },
   ];
 
   return (
     <div>
       <div className="dashboard-greeting">
-        <h1>Olá, {userName} 🌸</h1>
+        <h1>Olá, {userName ?? "KitsuyStore"} 🌸</h1>
         <p>Aqui está o resumo da sua loja</p>
       </div>
 
