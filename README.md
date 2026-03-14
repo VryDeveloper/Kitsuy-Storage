@@ -5,6 +5,90 @@
 ![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E?logo=supabase)
 ![Vercel](https://img.shields.io/badge/Vercel-Deploy-000000?logo=vercel)
 
+## About
+
+**Kitsuy Storage** is the internal management system for **Kitsuy Store**, built to centralize the store's financial and operational control. The platform provides tools for order tracking, customer management, price calculation with automatic import taxes and currency conversion — all in one place.
+
+Deploy: [kitsuy-storage.vercel.app](https://kitsuy-storage.vercel.app)
+
+---
+
+## Technologies
+
+- **React + TypeScript** — UI and application logic
+- **Vite** — Bundler and development environment
+- **Supabase** — Database and authentication
+- **CSS** — Interface styling
+
+---
+
+## Features
+
+- **Order Management** — Register, track and update store orders
+- **Customer Records** — Customer registration and history
+- **Price Calculator** — Automatic pricing with import taxes included
+- **Financial Summary** — Overview of profits, expenses and receivables
+- **YEN → BRL Converter** — Currency conversion reference for Japanese imports
+- **Automatic Tax Calculation** — Import taxes calculated automatically when pricing products
+
+---
+
+## Project Structure
+
+```
+Kitsuy-Storage/
+├── public/                  # Public assets
+├── src/                     # Application source code
+├── supabase-rls-auth.sql    # Supabase security configuration (RLS)
+├── index.html               # App entry point
+└── vite.config.ts           # Vite configuration
+```
+
+---
+
+## How to Run
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/VryDeveloper/Kitsuy-Storage.git
+   ```
+2. Navigate to the project folder:
+   ```bash
+   cd Kitsuy-Storage
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Fill in with your Supabase credentials
+   ```
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## Supabase Configuration
+
+This project uses Supabase **Row Level Security (RLS)** to protect data. Run the `supabase-rls-auth.sql` file in your Supabase project's SQL editor to properly configure access policies.
+
+---
+
+## Author
+
+Made with 💜 by [VryDeveloper](https://github.com/VryDeveloper)
+
+# Kitsuy Storage
+
+![React](https://img.shields.io/badge/React-TypeScript-61DAFB?logo=react)
+![Vite](https://img.shields.io/badge/Vite-Frontend-646CFF?logo=vite)
+![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E?logo=supabase)
+![Vercel](https://img.shields.io/badge/Vercel-Deploy-000000?logo=vercel)
+
 ## Sobre o Projeto
 
 O **Kitsuy Storage** é o sistema interno de gestão da **Kitsuy Store**, desenvolvido para centralizar o controle financeiro e operacional da loja. A plataforma oferece ferramentas para registro de pedidos, acompanhamento de clientes, cálculo de preços com taxas automáticas e conversão de moeda para importações — tudo em um só lugar.
