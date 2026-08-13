@@ -10,6 +10,7 @@ const toOrder = (row: any): Order => ({
   clientId:         row.client_id ?? '',
   purchasePrice:    String(row.purchase_price ?? 0),
   purchaseLink:     row.purchase_link ?? '',
+  imageUrl:         row.image_url ?? '',
   shippingCost:     String(row.shipping_cost ?? 0),
   marginType:       row.margin_type ?? 'fixed',
   marginValue:      String(row.margin_value ?? 150),
@@ -36,6 +37,7 @@ const fromOrder = (o: Omit<Order,'id'|'createdAt'>) => ({
   client_id:          o.clientId || null,
   purchase_price:     parseFloat(o.purchasePrice) || 0,
   purchase_link:      o.purchaseLink,
+  image_url:          o.imageUrl || null,
   shipping_cost:      parseFloat(o.shippingCost) || 0,
   margin_type:        o.marginType,
   margin_value:       parseFloat(o.marginValue) || 0,
@@ -54,6 +56,43 @@ const fromClient = (c: Omit<Client,'id'|'createdAt'>) => ({
   name: c.name, phone: c.phone,
   address: c.address, notes: c.notes,
 });
+
+
+// ── Upload de imagem do produto ──────────────────────
+const IMAGE_BUCKET = 'order-images';
+const MAX_IMAGE_SIZE_MB = 5;
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+export const ImageService = {
+  /** Faz upload da imagem e retorna a URL pública */
+  async upload(file: File): Promise<string> {
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      throw new Error('Formato inválido. Use JPG, PNG, WEBP ou GIF.');
+    }
+    if (file.size > MAX_IMAGE_SIZE_MB * 1024 * 1024) {
+      throw new Error(`Imagem muito grande. Máximo ${MAX_IMAGE_SIZE_MB}MB.`);
+    }
+
+    const ext = file.name.split('.').pop() || 'jpg';
+    const path = `${crypto.randomUUID()}.${ext}`;
+
+    const { error } = await supabase.storage
+      .from(IMAGE_BUCKET)
+      .upload(path, file, { cacheControl: '3600', upsert: false });
+    if (error) throw error;
+
+    const { data } = supabase.storage.from(IMAGE_BUCKET).getPublicUrl(path);
+    return data.publicUrl;
+  },
+
+  /** Remove uma imagem do storage a partir da URL pública */
+  async remove(url: string): Promise<void> {
+    if (!url) return;
+    const path = url.split(`${IMAGE_BUCKET}/`).pop();
+    if (!path) return;
+    await supabase.storage.from(IMAGE_BUCKET).remove([path]);
+  },
+};
 
 
 // ── Orders ──────────────────────────────────────────

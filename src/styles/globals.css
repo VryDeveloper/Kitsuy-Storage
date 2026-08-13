@@ -17,6 +17,7 @@ html, body {
   color: var(--text);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 #root {
@@ -39,10 +40,10 @@ input, select, textarea {
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar        { width: 7px; height: 7px; }
-::-webkit-scrollbar-track  { background: #fff; }
+::-webkit-scrollbar-track  { background: var(--scrollbar-track); }
 ::-webkit-scrollbar-thumb  { background: var(--pink); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--pink-dark); }
-html { scrollbar-width: thin; scrollbar-color: var(--pink) white; }
+html { scrollbar-width: thin; scrollbar-color: var(--pink) var(--scrollbar-track); }
 
 /* ── Layout utilitários ── */
 .page-wrapper {

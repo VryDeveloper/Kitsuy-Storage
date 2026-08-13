@@ -3,6 +3,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import type { User } from "../../services/auth";
+import { useTheme } from "../../hooks/useTheme";
 import "./Header.css";
 
 type Tab = "dashboard" | "orders" | "clients";
@@ -25,6 +26,7 @@ const TABS: { id: Tab; emoji: string; label: (o: number, c: number) => string }[
 export function Header({ activeTab, onTabChange, orderCount, clientCount, user, onSignOut }: HeaderProps) {
   const email = user.email ? user.email : "Usuário";
   const initials = email.slice(0, 2).toUpperCase();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <header className="header">
@@ -43,6 +45,14 @@ export function Header({ activeTab, onTabChange, orderCount, clientCount, user, 
         ))}
       </nav>
       <div className="header-user">
+        <button
+          className="header-theme-toggle"
+          onClick={toggleTheme}
+          title={theme === "dark" ? "Mudar para tema claro" : "Mudar para tema escuro"}
+          aria-label="Alternar tema"
+        >
+          {theme === "dark" ? "☀️" : "🌙"}
+        </button>
         <div className="header-avatar" title={email}>{initials}</div>
         <span className="header-email">{email}</span>
         <button className="header-signout" onClick={onSignOut} title="Sair">

@@ -2,11 +2,13 @@
 //  KitsuyStore — OrdersTab Component
 // ─────────────────────────────────────────────────────────────
 
+import { useState } from "react";
 import type { Order, Client } from "../../types";
 import { SHIPPING_CONFIG } from "../../utils/constants";
 import { fmt, fmtDate } from "../../utils/formatters";
 import { ShippingBadge } from "../ui/Badge";
 import { Button } from "../ui/Button";
+import { ImageLightbox } from "./ImageLightbox";
 import "./Orders.css";
 
 interface OrdersTabProps {
@@ -27,6 +29,8 @@ export function OrdersTab({
   shippingFilter, setShippingFilter,
   onAdd, onEdit, onDelete,
 }: OrdersTabProps) {
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+
   return (
     <div>
       <div className="page-header">
@@ -99,10 +103,23 @@ export function OrdersTab({
                 return (
                   <tr key={o.id}>
                     <td>
-                      <div className="order-product-name">{o.productName}</div>
-                      {o.purchaseLink && (
-                        <a href={o.purchaseLink} target="_blank" rel="noopener noreferrer" className="order-link">🔗 link</a>
-                      )}
+                      <div className="order-product-cell">
+                        {o.imageUrl && (
+                          <img
+                            src={o.imageUrl}
+                            alt={o.productName}
+                            className="order-thumb"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => setLightboxImage(o.imageUrl)}
+                          />
+                        )}
+                        <div>
+                          <div className="order-product-name">{o.productName}</div>
+                          {o.purchaseLink && (
+                            <a href={o.purchaseLink} target="_blank" rel="noopener noreferrer" className="order-link">🔗 link</a>
+                          )}
+                        </div>
+                      </div>
                     </td>
                     <td style={{ color: "var(--text-muted)", fontSize: "0.82rem" }}>{cl?.name ?? "—"}</td>
                     <td style={{ color: "var(--text-muted)", fontSize: "0.8rem", whiteSpace: "nowrap" }}>{fmtDate(o.orderDate)}</td>
@@ -134,6 +151,10 @@ export function OrdersTab({
             </tbody>
           </table>
         </div>
+      )}
+
+      {lightboxImage !== null && (
+        <ImageLightbox src={lightboxImage} onClose={() => setLightboxImage(null)} />
       )}
     </div>
   );

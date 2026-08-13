@@ -3,8 +3,9 @@
 ───────────────────────────────────────────────────────────── */
 
 .header {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--header-bg);
   backdrop-filter: blur(20px);
+  transition: background-color 0.25s ease;
   border-bottom: 2px solid var(--border-md);
   padding: 0 28px;
   display: flex;
@@ -69,6 +70,25 @@
   display: flex;
   align-items: center;
   gap: 9px;
+}
+
+.header-theme-toggle {
+  background: var(--pink-pale);
+  border: 2px solid var(--border-md);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.18s;
+}
+.header-theme-toggle:hover {
+  border-color: var(--pink);
+  transform: rotate(15deg) scale(1.05);
 }
 
 .header-avatar {

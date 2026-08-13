@@ -9,7 +9,7 @@
 }
 
 .client-card {
-  background: #fff;
+  background: var(--card);
   border: 2px solid var(--border);
   border-radius: var(--radius);
   padding: 18px;

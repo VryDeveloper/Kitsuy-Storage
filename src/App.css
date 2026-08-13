@@ -5,8 +5,9 @@
 /* ── App background ── */
 .app {
   min-height: 100vh;
-  background: linear-gradient(160deg, #ffffff 0%, #ffffff 60%, #ffffff 100%);
+  background: linear-gradient(160deg, var(--app-bg-start) 0%, var(--app-bg-start) 60%, var(--app-bg-end) 100%);
   position: relative;
+  transition: background 0.25s ease;
 }
 
 .app::before {
@@ -34,7 +35,7 @@
 }
 
 .modal {
-  background: #fff;
+  background: var(--card);
   border: 2px solid var(--border-md);
   border-radius: 20px;
   width: 100%;

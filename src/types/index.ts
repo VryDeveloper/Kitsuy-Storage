@@ -20,6 +20,7 @@ export interface Order {
   productName:   string;
   purchasePrice: string;   // Custo do produto (JP)
   purchaseLink:  string;
+  imageUrl:      string;   // URL pública da imagem do item (Supabase Storage)
 
   // Precificação (calculadora)
   shippingCost:  string;   // Frete internacional (R$75/80/90/120 ou livre)

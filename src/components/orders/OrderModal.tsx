@@ -2,7 +2,7 @@
 //  KitsuyStore — OrderModal (com Calculadora de Preço)
 // ─────────────────────────────────────────────────────────────
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Order, Client } from "../../types";
 import { SHIPPING_CONFIG } from "../../utils/constants";
 import { fmt, today } from "../../utils/formatters";
@@ -13,6 +13,7 @@ import {
   PROXY_FIXED,
   PROXY_PERCENT,
 } from "../../utils/pricing";
+import { ImageService } from "../../services/storage";
 import { Button } from "../ui/Button";
 import { YenConverter } from "./YenConverter";
 import "./Orders.css";
@@ -24,6 +25,7 @@ const EMPTY: OrderFormData = {
   clientId:        "",
   purchasePrice:   "",
   purchaseLink:    "",
+  imageUrl:        "",
   shippingCost:    "",
   marginType:      "fixed",
   marginValue:     "150",
@@ -50,6 +52,27 @@ export function OrderModal({ mode, data, clients, onSave, onClose }: OrderModalP
   const set = <K extends keyof OrderFormData>(key: K) => (value: OrderFormData[K]) =>
     setF(prev => ({ ...prev, [key]: value }));
 
+  // ── Upload de imagem do produto ──
+  const [imageFile, setImageFile]       = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>(f.imageUrl || "");
+  const [uploading, setUploading]       = useState(false);
+  const [uploadError, setUploadError]   = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImagePick = (file: File | undefined | null) => {
+    if (!file) return;
+    setUploadError("");
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setImagePreview("");
+    set("imageUrl")("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   const purchasePrice = parseFloat(f.purchasePrice) || 0;
   const shippingCost  = parseFloat(f.shippingCost)  || 0;
   const marginValue   = parseFloat(f.marginValue)   || 0;
@@ -75,10 +98,27 @@ export function OrderModal({ mode, data, clients, onSave, onClose }: OrderModalP
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [f.purchasePrice, f.shippingCost, f.marginValue, f.discountValue]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!f.productName.trim()) { alert("Nome do produto é obrigatório."); return; }
     if (!purchasePrice)        { alert("Preço de compra é obrigatório."); return; }
-    onSave(data ? { ...f, id: data.id, createdAt: data.createdAt } : f);
+
+    let finalData = f;
+
+    if (imageFile) {
+      setUploading(true);
+      setUploadError("");
+      try {
+        const url = await ImageService.upload(imageFile);
+        finalData = { ...f, imageUrl: url };
+      } catch (err: any) {
+        setUploading(false);
+        setUploadError(err?.message || "Erro ao enviar imagem.");
+        return;
+      }
+      setUploading(false);
+    }
+
+    onSave(data ? { ...finalData, id: data.id, createdAt: data.createdAt } : finalData);
   };
 
   const saleNum = parseFloat(f.salePrice) || 0;
@@ -111,6 +151,42 @@ export function OrderModal({ mode, data, clients, onSave, onClose }: OrderModalP
               onChange={e => set("productName")(e.target.value)}
               placeholder="Ex: Figuarts Zero Zoro"
             />
+          </div>
+
+          {/* Imagem do item */}
+          <div className="form-field">
+            <label>🖼️ Imagem do Item</label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              style={{ display: "none" }}
+              onChange={e => handleImagePick(e.target.files?.[0])}
+            />
+            {imagePreview ? (
+              <div className="image-upload-preview">
+                <img src={imagePreview} alt="Prévia do item" />
+                <div className="image-upload-preview-actions">
+                  <Button type="button" variant="ghost" size="sm" onClick={() => fileInputRef.current?.click()}>
+                    Trocar
+                  </Button>
+                  <Button type="button" variant="danger" size="sm" onClick={handleRemoveImage}>
+                    Remover
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="image-upload-dropzone"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <span className="image-upload-icon">📷</span>
+                <span>Clique para enviar uma foto do item</span>
+                <span className="image-upload-hint">JPG, PNG, WEBP ou GIF — até 5MB</span>
+              </button>
+            )}
+            {uploadError && <span style={{ fontSize: "0.75rem", color: "var(--red)" }}>{uploadError}</span>}
           </div>
 
           <div className="form-row">
@@ -362,9 +438,9 @@ export function OrderModal({ mode, data, clients, onSave, onClose }: OrderModalP
           </div>
 
           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 4 }}>
-            <Button variant="ghost" onClick={onClose}>Cancelar</Button>
-            <Button variant="primary" onClick={handleSave}>
-              {mode === "add" ? "🌸 Criar Pedido" : "💾 Salvar"}
+            <Button variant="ghost" onClick={onClose} disabled={uploading}>Cancelar</Button>
+            <Button variant="primary" onClick={handleSave} disabled={uploading}>
+              {uploading ? "⏳ Enviando imagem..." : mode === "add" ? "🌸 Criar Pedido" : "💾 Salvar"}
             </Button>
           </div>
         </div>

@@ -49,4 +49,57 @@
   /* Tipografia */
   --font-display: 'Fredoka One', cursive;
   --font-body:    'Nunito', sans-serif;
+
+  /* Extras usados em superfícies "brancas" (inputs, breakdown, header) */
+  --header-bg:    rgba(255, 255, 255, 0.9);
+  --app-bg-start: #ffffff;
+  --app-bg-end:   #ffffff;
+  --scrollbar-track: #ffffff;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Dark Mode — ativado via [data-theme="dark"] no <html>
+───────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  /* Paleta principal (levemente ajustada para contraste no escuro) */
+  --pink:         #f472b6;
+  --pink-light:   #831843;
+  --pink-pale:    #2a1a24;
+  --pink-dark:    #f9a8d4;
+
+  --red:          #f87171;
+  --red-dark:     #ef4444;
+
+  /* Fundo */
+  --bg:           #14121a;
+  --bg-subtle:    #1c1926;
+  --card:         #1e1b29;
+
+  /* Bordas */
+  --border:       #f472b64d;
+  --border-md:    #3a2f3f;
+
+  /* Texto */
+  --text:         #f3f0f7;
+  --text-muted:   #a89fb3;
+  --text-light:   #6f6779;
+
+  /* Semânticas */
+  --green:        #4ade80;
+  --green-bg:     #10241a;
+  --green-border: #1f5c3a;
+  --yellow:       #fbbf24;
+  --purple:       #a78bfa;
+  --blue:         #60a5fa;
+
+  /* Sombras */
+  --shadow:       0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-lg:    0 8px 40px rgba(0, 0, 0, 0.55);
+  --glow:         0 0 20px rgba(244, 114, 182, 0.25);
+
+  /* Extras */
+  --header-bg:       rgba(20, 18, 26, 0.85);
+  --app-bg-start:    #14121a;
+  --app-bg-end:      #1c1420;
+  --scrollbar-track: #1e1b29;
 }

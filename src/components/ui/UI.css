@@ -88,7 +88,7 @@ label {
 }
 
 input, select, textarea {
-  background: #fff;
+  background: var(--card);
   border: 2px solid var(--border-md);
   border-radius: var(--radius-pill);
   padding: 10px 16px;
@@ -97,7 +97,7 @@ input, select, textarea {
   font-weight: 500;
   outline: none;
   width: 100%;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
 }
 input:focus, select:focus, textarea:focus {
   border-color: var(--pink);
@@ -105,7 +105,7 @@ input:focus, select:focus, textarea:focus {
 }
 textarea { border-radius: 12px; resize: vertical; }
 select   { border-radius: var(--radius-pill); }
-select option { background: #fff; }
+select option { background: var(--card); color: var(--text); }
 
 /* ── Checkbox row ── */
 .checkbox-row {
@@ -151,7 +151,7 @@ select option { background: #fff; }
 
 /* ── Stat card ── */
 .stat-card {
-  background: #ffffff;
+  background: var(--card);
   border: var(--border-px) solid var(--border);
   border-radius: var(--radius);
   padding: 20px;
