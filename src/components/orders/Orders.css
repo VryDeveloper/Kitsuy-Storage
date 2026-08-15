@@ -1,0 +1,253 @@
+/* ─────────────────────────────────────────────────────────────
+   KitsuyStore — Orders
+───────────────────────────────────────────────────────────── */
+
+.order-product-name {
+  font-weight: 700;
+  max-width: 180px;
+}
+
+.order-link {
+  color: var(--pink);
+  font-size: 0.71rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 2px;
+  transition: color 0.15s;
+}
+.order-link:hover { color: var(--pink-dark); }
+
+/* ── Upload de imagem do item ── */
+.image-upload-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  padding: 22px 14px;
+  background: var(--pink-pale);
+  border: 2px dashed var(--border-md);
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.18s;
+}
+.image-upload-dropzone:hover {
+  border-color: var(--pink);
+  color: var(--pink-dark);
+  background: var(--pink-light);
+}
+.image-upload-icon { font-size: 1.6rem; }
+.image-upload-hint {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+.image-upload-preview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--pink-pale);
+  border: 2px solid var(--border-md);
+  border-radius: 14px;
+  padding: 10px;
+}
+.image-upload-preview img {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid var(--border-md);
+  flex-shrink: 0;
+  background: var(--card);
+}
+.image-upload-preview-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Thumbnail na tabela de pedidos */
+.order-thumb {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1.5px solid var(--border-md);
+  flex-shrink: 0;
+  background: var(--card);
+  cursor: pointer;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.order-thumb:hover {
+  transform: scale(1.12);
+  opacity: 0.9;
+}
+.order-product-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── Lightbox de imagem do item ── */
+.image-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(236, 72, 153, 0.15);
+  backdrop-filter: blur(8px);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.image-lightbox-content {
+  position: relative;
+  background: var(--card);
+  border: 2px solid var(--border-md);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 16px;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+}
+.image-lightbox-content img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 12px;
+  object-fit: contain;
+  display: block;
+}
+.image-lightbox-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--border-md);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.image-lightbox-close:hover {
+  border-color: var(--pink);
+  color: var(--pink-dark);
+}
+
+/* ── Pricing Calculator ── */
+.pricing-box {
+  background: var(--pink-pale);
+  border: 2px solid var(--border-md);
+  border-radius: 14px;
+  padding: 18px;
+}
+.pricing-box-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.proxy-fees-row {
+  background: var(--card);
+  border: 1.5px solid var(--border-md);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.proxy-fee-item { display: flex; justify-content: space-between; align-items: center; }
+.proxy-fee-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+.proxy-fee-value { font-size: 0.82rem; font-weight: 700; color: var(--pink-dark); }
+
+.shipping-presets { display: flex; gap: 7px; flex-wrap: wrap; }
+.preset-btn {
+  background: var(--card);
+  border: 2px solid var(--border-md);
+  border-radius: 20px;
+  padding: 5px 13px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.preset-btn:hover { border-color: var(--pink); color: var(--pink); }
+.preset-btn.active {
+  background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+  border-color: var(--pink);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(236,72,153,.3);
+}
+
+.margin-toggle { display: flex; gap: 7px; }
+.toggle-btn {
+  flex: 1;
+  background: var(--card);
+  border: 2px solid var(--border-md);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: center;
+}
+.toggle-btn:hover { border-color: var(--pink); color: var(--pink); }
+.toggle-btn.active {
+  background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+  border-color: var(--pink);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(236,72,153,.3);
+}
+
+.pricing-breakdown {
+  background: var(--card);
+  border: 2px solid var(--border-md);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.breakdown-row span:last-child { font-weight: 600; color: var(--text); }
+.breakdown-subtotal {
+  border-top: 1.5px dashed var(--border-md);
+  padding-top: 6px;
+  margin-top: 2px;
+}
+.breakdown-subtotal span { color: var(--text) !important; font-weight: 700 !important; }
+.breakdown-discount span:last-child { color: var(--red) !important; }
+.breakdown-total {
+  border-top: 2px solid var(--pink-light);
+  padding-top: 8px;
+  margin-top: 4px;
+  font-size: 0.95rem !important;
+}
+.breakdown-total span { color: var(--pink-dark) !important; font-weight: 800 !important; font-family: var(--font-display); }
+.breakdown-profit { margin-top: 2px; }
+.breakdown-profit span:first-child { color: var(--text) !important; font-weight: 700 !important; }

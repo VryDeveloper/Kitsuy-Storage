@@ -1,0 +1,105 @@
+/* ─────────────────────────────────────────────────────────────
+   KitsuyStore — CSS Variables (Pink Theme)
+───────────────────────────────────────────────────────────── */
+
+:root {
+  /* Paleta principal */
+  --pink:         #ec4899;
+  --pink-light:   #fbcfe8;
+  --pink-pale:    #fdf2f8;
+  --pink-dark:    #db2777;
+
+  /* Acento */
+  --red:          #ef4444;
+  --red-dark:     #dc2626;
+
+  /* Fundo */
+  --bg:           #ffffff;
+  --bg-subtle:    #fdf2f8;
+  --card:         #ffffff;
+
+  /* Bordas */
+  --border:       #ec489a;
+  --border-md:    #fbcfe8;
+  --border-px:    3px;
+
+  /* Texto */
+  --text:         #1f2937;
+  --text-muted:   #6b7280;
+  --text-light:   #9ca3af;
+
+  /* Semânticas */
+  --green:        #10b981;
+  --green-bg:     #f0fdf4;
+  --green-border: #bbf7d0;
+  --yellow:       #f59e0b;
+  --purple:       #8b5cf6;
+  --blue:         #3b82f6;
+
+  /* Forma */
+  --radius:       14px;
+  --radius-sm:    8px;
+  --radius-pill:  30px;
+
+  /* Sombras */
+  --shadow:       0 2px 5px #ec489a;
+  --shadow-lg:    0 8px 40px rgba(236, 72, 154, 0.424);
+  --glow:         0 0 20px rgba(236, 72, 153, 0.35);
+
+  /* Tipografia */
+  --font-display: 'Fredoka One', cursive;
+  --font-body:    'Nunito', sans-serif;
+
+  /* Extras usados em superfícies "brancas" (inputs, breakdown, header) */
+  --header-bg:    rgba(255, 255, 255, 0.9);
+  --app-bg-start: #ffffff;
+  --app-bg-end:   #ffffff;
+  --scrollbar-track: #ffffff;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Dark Mode — ativado via [data-theme="dark"] no <html>
+───────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  /* Paleta principal (levemente ajustada para contraste no escuro) */
+  --pink:         #f472b6;
+  --pink-light:   #831843;
+  --pink-pale:    #2a1a24;
+  --pink-dark:    #f9a8d4;
+
+  --red:          #f87171;
+  --red-dark:     #ef4444;
+
+  /* Fundo */
+  --bg:           #14121a;
+  --bg-subtle:    #1c1926;
+  --card:         #1e1b29;
+
+  /* Bordas */
+  --border:       #f472b64d;
+  --border-md:    #3a2f3f;
+
+  /* Texto */
+  --text:         #f3f0f7;
+  --text-muted:   #a89fb3;
+  --text-light:   #6f6779;
+
+  /* Semânticas */
+  --green:        #4ade80;
+  --green-bg:     #10241a;
+  --green-border: #1f5c3a;
+  --yellow:       #fbbf24;
+  --purple:       #a78bfa;
+  --blue:         #60a5fa;
+
+  /* Sombras */
+  --shadow:       0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-lg:    0 8px 40px rgba(0, 0, 0, 0.55);
+  --glow:         0 0 20px rgba(244, 114, 182, 0.25);
+
+  /* Extras */
+  --header-bg:       rgba(20, 18, 26, 0.85);
+  --app-bg-start:    #14121a;
+  --app-bg-end:      #1c1420;
+  --scrollbar-track: #1e1b29;
+}

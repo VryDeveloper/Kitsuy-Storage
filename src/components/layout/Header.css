@@ -1,0 +1,144 @@
+/* ─────────────────────────────────────────────────────────────
+   KitsuyStore — Header
+───────────────────────────────────────────────────────────── */
+
+.header {
+  background: var(--header-bg);
+  backdrop-filter: blur(20px);
+  transition: background-color 0.25s ease;
+  border-bottom: 2px solid var(--border-md);
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-logo {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  background: linear-gradient(135deg, var(--pink), var(--red));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  user-select: none;
+}
+.header-logo em {
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+  font-style: normal;
+}
+
+.header-tabs {
+  display: flex;
+  gap: 5px;
+  background: var(--pink-pale);
+  border: 2px solid var(--border);
+  border-radius: 40px;
+  padding: 4px;
+}
+
+.header-tab {
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.81rem;
+  padding: 7px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: background 0.2s, color 0.2s;
+}
+.header-tab:hover { color: var(--pink); }
+.header-tab.active {
+  background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+  color: #fff;
+  box-shadow: var(--glow);
+}
+
+@media (max-width: 580px) {
+  .header { padding: 0 14px; }
+  .header-tab { padding: 6px 10px; font-size: 0.74rem; }
+}
+
+/* ── User area ── */
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.header-theme-toggle {
+  background: var(--pink-pale);
+  border: 2px solid var(--border-md);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.18s;
+}
+.header-theme-toggle:hover {
+  border-color: var(--pink);
+  transform: rotate(15deg) scale(1.05);
+}
+
+.header-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--glow);
+}
+
+.header-email {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-signout {
+  background: none;
+  border: 2px solid var(--border-md);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-family: var(--font-body);
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.header-signout:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: #fef2f2;
+}
+
+@media (max-width: 700px) {
+  .header-email { display: none; }
+}
+@media (max-width: 520px) {
+  .header-user { gap: 6px; }
+  .header-signout { padding: 4px 8px; }
+}
