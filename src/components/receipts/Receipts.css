@@ -1,0 +1,88 @@
+/* ─────────────────────────────────────────────────────────────
+   KitsuyStore — Comprovantes de pagamento
+   ───────────────────────────────────────────────────────────── */
+
+.receipt-label-hint {
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.receipt-pick-list {
+  max-height: 180px;
+  overflow-y: auto;
+  border: 2px solid var(--border-md);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+}
+
+.receipt-pick-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+.receipt-pick-item:hover { background: var(--pink-pale); }
+.receipt-pick-item input { width: auto; margin: 0; }
+
+.receipt-pick-meta {
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.receipt-pick-empty {
+  padding: 10px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.receipt-file-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.84rem;
+  color: var(--pink);
+  text-align: left;
+  word-break: break-all;
+}
+.receipt-file-link:hover { color: var(--pink-dark); text-decoration: underline; }
+
+.receipt-list {
+  border: 2px solid var(--border-md);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+
+.receipt-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.receipt-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-top: 1px solid var(--border-md);
+}
+.receipt-list-item .receipt-file-link { flex: 1; min-width: 0; }
+
+.receipt-count {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 2px;
+}

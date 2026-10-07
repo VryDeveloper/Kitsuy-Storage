@@ -6,24 +6,26 @@ import type { User } from "../../services/auth";
 import { useTheme } from "../../hooks/useTheme";
 import "./Header.css";
 
-type Tab = "dashboard" | "orders" | "clients";
+type Tab = "dashboard" | "orders" | "clients" | "receipts";
 
 interface HeaderProps {
   activeTab:    Tab;
   onTabChange:  (tab: Tab) => void;
   orderCount:   number;
   clientCount:  number;
+  receiptCount: number;
   user:         User;
   onSignOut:    () => void;
 }
 
-const TABS: { id: Tab; emoji: string; label: (o: number, c: number) => string }[] = [
-  { id: "dashboard", emoji: "🏠", label: ()    => "Dashboard" },
-  { id: "orders",    emoji: "📦", label: (o)   => `Pedidos${o ? ` (${o})` : ""}` },
-  { id: "clients",   emoji: "👤", label: (_,c) => `Clientes${c ? ` (${c})` : ""}` },
+const TABS: { id: Tab; emoji: string; label: (o: number, c: number, r: number) => string }[] = [
+  { id: "dashboard", emoji: "🏠", label: ()      => "Dashboard" },
+  { id: "orders",    emoji: "📦", label: (o)     => `Pedidos${o ? ` (${o})` : ""}` },
+  { id: "clients",   emoji: "👤", label: (_,c)   => `Clientes${c ? ` (${c})` : ""}` },
+  { id: "receipts",  emoji: "🧾", label: (_,_c,r) => `Comprovantes${r ? ` (${r})` : ""}` },
 ];
 
-export function Header({ activeTab, onTabChange, orderCount, clientCount, user, onSignOut }: HeaderProps) {
+export function Header({ activeTab, onTabChange, orderCount, clientCount, receiptCount, user, onSignOut }: HeaderProps) {
   const email = user.email ? user.email : "Usuário";
   const initials = email.slice(0, 2).toUpperCase();
   const { theme, toggleTheme } = useTheme();
@@ -40,7 +42,7 @@ export function Header({ activeTab, onTabChange, orderCount, clientCount, user, 
             className={`header-tab${activeTab === t.id ? " active" : ""}`}
             onClick={() => onTabChange(t.id)}
           >
-            {t.emoji} {t.label(orderCount, clientCount)}
+            {t.emoji} {t.label(orderCount, clientCount, receiptCount)}
           </button>
         ))}
       </nav>

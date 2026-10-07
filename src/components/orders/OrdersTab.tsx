@@ -5,11 +5,12 @@
 import { useState } from "react";
 import type { Order, Client } from "../../types";
 import { SHIPPING_CONFIG } from "../../utils/constants";
-import { fmt, fmtDate } from "../../utils/formatters";
+import { fmt, fmtDate, safeHttpUrl } from "../../utils/formatters";
 import { ShippingBadge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { ImageLightbox } from "./ImageLightbox";
 import "./Orders.css";
+import "../receipts/Receipts.css";
 
 interface OrdersTabProps {
   orders: Order[];
@@ -21,13 +22,14 @@ interface OrdersTabProps {
   onAdd: () => void;
   onEdit: (o: Order) => void;
   onDelete: (id: string) => void;
+  receiptCounts: Record<string, number>;   // orderId → nº de comprovantes
 }
 
 export function OrdersTab({
   orders, clients,
   search, setSearch,
   shippingFilter, setShippingFilter,
-  onAdd, onEdit, onDelete,
+  onAdd, onEdit, onDelete, receiptCounts,
 }: OrdersTabProps) {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
@@ -42,7 +44,7 @@ export function OrdersTab({
         <div className="search-wrapper">
           <span className="search-icon">🔍</span>
           <input
-            placeholder="Buscar produto ou cliente..."
+            placeholder="Buscar produto, cliente ou vendedor..."
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
@@ -73,6 +75,7 @@ export function OrdersTab({
               <tr>
                 <th>Produto</th>
                 <th>Cliente</th>
+                <th>Vendedor</th>
                 <th>Data</th>
                 <th>Custo</th>
                 <th>Venda</th>
@@ -115,14 +118,22 @@ export function OrdersTab({
                         )}
                         <div>
                           <div className="order-product-name">{o.productName}</div>
-                          {o.purchaseLink && (
-                            <a href={o.purchaseLink} target="_blank" rel="noopener noreferrer" className="order-link">🔗 link</a>
+                          {safeHttpUrl(o.purchaseLink) && (
+                            <a href={safeHttpUrl(o.purchaseLink)!} target="_blank" rel="noopener noreferrer" className="order-link">🔗 link</a>
                           )}
                         </div>
                       </div>
                     </td>
                     <td style={{ color: "var(--text-muted)", fontSize: "0.82rem" }}>{cl?.name ?? "—"}</td>
-                    <td style={{ color: "var(--text-muted)", fontSize: "0.8rem", whiteSpace: "nowrap" }}>{fmtDate(o.orderDate)}</td>
+                    <td style={{ color: "var(--text-muted)", fontSize: "0.82rem" }}>{o.sellerName || "—"}</td>
+                    <td style={{ color: "var(--text-muted)", fontSize: "0.8rem", whiteSpace: "nowrap" }}>
+                      {fmtDate(o.orderDate)}
+                      {o.createdByName && (
+                        <div style={{ fontSize: "0.7rem", opacity: 0.8 }} title="Quem registrou o pedido no sistema">
+                          por {o.createdByName}
+                        </div>
+                      )}
+                    </td>
                     <td style={{ color: "var(--text-muted)" }}>{fmt(cost)}</td>
                     <td style={{ fontWeight: 700, color: "var(--pink-dark)" }}>{fmt(sale)}</td>
                     <td>
@@ -138,7 +149,12 @@ export function OrdersTab({
                       </span>
                     </td>
                     <td><ShippingBadge status={o.shippingStatus} /></td>
-                    <td style={{ fontWeight: 700, fontSize: "0.8rem", color: payColor, whiteSpace: "nowrap" }}>{payLabel}</td>
+                    <td style={{ fontWeight: 700, fontSize: "0.8rem", color: payColor, whiteSpace: "nowrap" }}>
+                      {payLabel}
+                      {receiptCounts[o.id] > 0 && (
+                        <span className="receipt-count" title="Comprovantes anexados">🧾 {receiptCounts[o.id]}</span>
+                      )}
+                    </td>
                     <td>
                       <div className="actions-group">
                         <Button variant="ghost"  size="sm" onClick={() => onEdit(o)}>✏️</Button>

@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import type { Order, Client } from '../types';
+import type { Order, Client, PaymentReceipt, ReceiptFormData } from '../types';
 
 
 // ── Mapeamento banco (snake_case) ↔ app (camelCase) ──
@@ -8,6 +8,9 @@ const toOrder = (row: any): Order => ({
   createdAt:        row.created_at,
   productName:      row.product_name,
   clientId:         row.client_id ?? '',
+  sellerName:       row.seller_name ?? '',
+  createdBy:        row.created_by ?? undefined,
+  createdByName:    row.created_by_name ?? undefined,
   purchasePrice:    String(row.purchase_price ?? 0),
   purchaseLink:     row.purchase_link ?? '',
   imageUrl:         row.image_url ?? '',
@@ -38,6 +41,7 @@ const toClient = (row: any): Client => ({
 const fromOrder = (o: Omit<Order,'id'|'createdAt'>) => ({
   product_name:       o.productName,
   client_id:          o.clientId || null,
+  seller_name:        o.sellerName.trim() || null,
   purchase_price:     parseFloat(o.purchasePrice) || 0,
   purchase_link:      o.purchaseLink,
   image_url:          o.imageUrl || null,
@@ -157,5 +161,115 @@ export const ClientService = {
     const { error } = await supabase
       .from('clients').delete().eq('id', id);
     if (error) throw error;
+  },
+};
+
+
+// ── Comprovantes de pagamento ───────────────────────
+const RECEIPT_BUCKET = 'payment-receipts';
+const MAX_RECEIPT_SIZE_MB = 10;
+export const RECEIPT_ALLOWED_TYPES = ['application/pdf', 'image/png', 'image/jpeg'];
+
+const toReceipt = (row: any): PaymentReceipt => ({
+  id:            row.id,
+  createdAt:     row.created_at,
+  filePath:      row.file_path,
+  fileName:      row.file_name,
+  fileType:      row.file_type,
+  amount:        row.amount != null ? String(row.amount) : '',
+  paymentDate:   row.payment_date ?? '',
+  notes:         row.notes ?? '',
+  clientIds:     (row.payment_receipt_clients ?? []).map((r: any) => r.client_id),
+  orderIds:      (row.payment_receipt_orders  ?? []).map((r: any) => r.order_id),
+  createdByName: row.created_by_name ?? undefined,
+});
+
+const RECEIPT_SELECT = '*, payment_receipt_clients(client_id), payment_receipt_orders(order_id)';
+
+const receiptParams = (d: ReceiptFormData) => ({
+  p_amount:       d.amount ? parseFloat(d.amount) || null : null,
+  p_payment_date: d.paymentDate || null,
+  p_notes:        d.notes.trim() || null,
+  p_client_ids:   d.clientIds,
+  p_order_ids:    d.orderIds,
+});
+
+export const ReceiptService = {
+  async getAll(): Promise<PaymentReceipt[]> {
+    const { data, error } = await supabase
+      .from('payment_receipts').select(RECEIPT_SELECT)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return (data ?? []).map(toReceipt);
+  },
+
+  async getById(id: string): Promise<PaymentReceipt> {
+    const { data, error } = await supabase
+      .from('payment_receipts').select(RECEIPT_SELECT)
+      .eq('id', id).single();
+    if (error) throw error;
+    return toReceipt(data);
+  },
+
+  /** Envia o arquivo e cria o comprovante com os vínculos (cliente obrigatório) */
+  async create(file: File, d: ReceiptFormData): Promise<PaymentReceipt> {
+    if (!RECEIPT_ALLOWED_TYPES.includes(file.type)) {
+      throw new Error('Formato inválido. Use PDF, PNG ou JPG.');
+    }
+    if (file.size > MAX_RECEIPT_SIZE_MB * 1024 * 1024) {
+      throw new Error(`Arquivo muito grande. Máximo ${MAX_RECEIPT_SIZE_MB}MB.`);
+    }
+    if (d.clientIds.length === 0) {
+      throw new Error('Vincule pelo menos um cliente ao comprovante.');
+    }
+
+    const ext = file.name.split('.').pop() || 'pdf';
+    const path = `${crypto.randomUUID()}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from(RECEIPT_BUCKET)
+      .upload(path, file, { contentType: file.type, upsert: false });
+    if (upErr) throw upErr;
+
+    const { data: id, error } = await supabase.rpc('save_payment_receipt', {
+      p_receipt_id: null,
+      p_file_path:  path,
+      p_file_name:  file.name,
+      p_file_type:  file.type,
+      ...receiptParams(d),
+    });
+    if (error) {
+      // Não deixa arquivo órfão no storage se o registro falhar
+      await supabase.storage.from(RECEIPT_BUCKET).remove([path]);
+      throw error;
+    }
+    return this.getById(id as string);
+  },
+
+  /** Atualiza dados e vínculos (o arquivo em si não muda) */
+  async update(r: PaymentReceipt): Promise<PaymentReceipt> {
+    const { error } = await supabase.rpc('save_payment_receipt', {
+      p_receipt_id: r.id,
+      p_file_path:  r.filePath,
+      p_file_name:  r.fileName,
+      p_file_type:  r.fileType,
+      ...receiptParams(r),
+    });
+    if (error) throw error;
+    return this.getById(r.id);
+  },
+
+  async delete(r: PaymentReceipt): Promise<void> {
+    const { error } = await supabase
+      .from('payment_receipts').delete().eq('id', r.id);
+    if (error) throw error;
+    await supabase.storage.from(RECEIPT_BUCKET).remove([r.filePath]);
+  },
+
+  /** Link temporário (1h) para abrir o arquivo — o bucket é privado */
+  async getFileUrl(path: string): Promise<string> {
+    const { data, error } = await supabase.storage
+      .from(RECEIPT_BUCKET).createSignedUrl(path, 60 * 60);
+    if (error) throw error;
+    return data.signedUrl;
   },
 };

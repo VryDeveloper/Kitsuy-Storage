@@ -5,6 +5,8 @@ import type { User } from "@supabase/supabase-js";
 export interface AuthState {
   user:    User | null;
   loading: boolean;
+  isStaff: boolean | null;   // null = verificando
+
   signIn:  (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -12,6 +14,7 @@ export interface AuthState {
 export function useAuth(): AuthState {
   const [user,    setUser]    = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isStaff, setIsStaff] = useState<boolean | null>(null);
 
   useEffect(() => {
     // 1) onAuthStateChange → resolve o loading imediatamente (sem async)
@@ -31,6 +34,20 @@ export function useAuth(): AuthState {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Confere se a conta está na lista da equipe (app_staff).
+  // É só para a interface — quem bloqueia de verdade são as políticas do banco,
+  // por isso, se a verificação falhar (ex.: script ainda não rodado), não trava o app.
+  const userId = user?.id;
+  useEffect(() => {
+    if (!userId) { setIsStaff(null); return; }
+    let cancelled = false;
+    setIsStaff(null);
+    supabase.rpc("is_staff").then(({ data, error }) => {
+      if (!cancelled) setIsStaff(error ? true : data === true);
+    });
+    return () => { cancelled = true; };
+  }, [userId]);
+
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
       email: email.trim().toLowerCase(),
@@ -43,5 +60,5 @@ export function useAuth(): AuthState {
     await supabase.auth.signOut();
   };
 
-  return { user, loading, signIn, signOut };
+  return { user, loading, isStaff, signIn, signOut };
 }

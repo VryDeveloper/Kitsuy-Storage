@@ -1,3 +1,6 @@
+-- ⚠️ OBSOLETO — use supabase-security-hardening.sql.
+--    Rodar este arquivo de novo volta a liberar acesso para
+--    QUALQUER conta logada, não só a equipe.
 -- ============================================================
 --  KitsuyStore — Políticas RLS com autenticação
 --  Execute no SQL Editor do Supabase após configurar o Auth

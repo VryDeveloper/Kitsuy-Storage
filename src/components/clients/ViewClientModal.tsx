@@ -2,10 +2,11 @@
 //  KitsuyStore — ViewClientModal Component
 // ─────────────────────────────────────────────────────────────
 
-import type { Client, Order } from "../../types";
+import type { Client, Order, PaymentReceipt } from "../../types";
 import { fmt, fmtDate } from "../../utils/formatters";
 import { ShippingBadge } from "../ui/Badge";
 import { Button } from "../ui/Button";
+import { ReceiptList } from "../receipts/ReceiptList";
 import "./Clients.css";
 
 interface ViewClientModalProps {
@@ -13,9 +14,12 @@ interface ViewClientModalProps {
   orders: Order[];
   onClose: () => void;
   onEdit: () => void;
+  receipts: PaymentReceipt[];
+  onAddReceipt: () => void;
+  onEditReceipt: (r: PaymentReceipt) => void;
 }
 
-export function ViewClientModal({ client, orders, onClose, onEdit }: ViewClientModalProps) {
+export function ViewClientModal({ client, orders, onClose, onEdit, receipts, onAddReceipt, onEditReceipt }: ViewClientModalProps) {
   const totalSpent = orders.reduce((s, o) => s + (parseFloat(o.salePrice) || 0), 0);
 
   return (
@@ -84,6 +88,9 @@ export function ViewClientModal({ client, orders, onClose, onEdit }: ViewClientM
             })}
           </div>
         )}
+        <div style={{ marginTop: 16 }}>
+          <ReceiptList receipts={receipts} onAdd={onAddReceipt} onEdit={onEditReceipt} />
+        </div>
       </div>
     </div>
   );

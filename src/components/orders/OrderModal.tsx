@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import { useState, useEffect, useRef } from "react";
-import type { Order, Client } from "../../types";
+import type { Order, Client, PaymentReceipt } from "../../types";
 import { SHIPPING_CONFIG } from "../../utils/constants";
 import { fmt, today } from "../../utils/formatters";
 import {
@@ -16,6 +16,7 @@ import {
 import { ImageService } from "../../services/storage";
 import { Button } from "../ui/Button";
 import { YenConverter } from "./YenConverter";
+import { ReceiptList } from "../receipts/ReceiptList";
 import "./Orders.css";
 
 type OrderFormData = Omit<Order, "id" | "createdAt">;
@@ -23,6 +24,7 @@ type OrderFormData = Omit<Order, "id" | "createdAt">;
 const EMPTY: OrderFormData = {
   productName:     "",
   clientId:        "",
+  sellerName:      "",
   purchasePrice:   "",
   purchaseLink:    "",
   imageUrl:        "",
@@ -46,11 +48,15 @@ interface OrderModalProps {
   mode: "add" | "edit";
   data?: Order;
   clients: Client[];
+  sellers: string[];   // Vendedores já usados em outros pedidos (sugestões)
+  receipts?: PaymentReceipt[];                  // Comprovantes vinculados (modo edição)
+  onAddReceipt?: () => void;
+  onEditReceipt?: (r: PaymentReceipt) => void;
   onSave: (data: Order | OrderFormData) => void;
   onClose: () => void;
 }
 
-export function OrderModal({ mode, data, clients, onSave, onClose }: OrderModalProps) {
+export function OrderModal({ mode, data, clients, sellers, receipts = [], onAddReceipt, onEditReceipt, onSave, onClose }: OrderModalProps) {
   const [f, setF] = useState<OrderFormData>({
     ...EMPTY,
     ...data,
@@ -184,6 +190,12 @@ export function OrderModal({ mode, data, clients, onSave, onClose }: OrderModalP
           <div className="modal-title">
             {mode === "add" ? "🌸 Novo Pedido" : "✏️ Editar Pedido"}
           </div>
+          {mode === "edit" && data && (
+            <div style={{ fontSize: "0.76rem", color: "var(--text-muted)", marginTop: -8, marginBottom: 12 }}>
+              Criado por <strong>{data.createdByName || "—"}</strong>
+              {data.createdAt && <> em {new Date(data.createdAt).toLocaleString("pt-BR")}</>}
+            </div>
+          )}
 
         <div className="form-group">
 
@@ -245,6 +257,19 @@ export function OrderModal({ mode, data, clients, onSave, onClose }: OrderModalP
               <label>Data do Pedido</label>
               <input type="date" value={f.orderDate} onChange={e => set("orderDate")(e.target.value)} />
             </div>
+          </div>
+
+          <div className="form-field">
+            <label>🧑‍💼 Vendedor</label>
+            <input
+              list="order-sellers"
+              value={f.sellerName}
+              onChange={e => set("sellerName")(e.target.value)}
+              placeholder="Quem fez a venda?"
+            />
+            <datalist id="order-sellers">
+              {sellers.map(s => <option key={s} value={s} />)}
+            </datalist>
           </div>
 
           <div className="form-row">
@@ -497,6 +522,15 @@ export function OrderModal({ mode, data, clients, onSave, onClose }: OrderModalP
               </div>
             )}
           </div>
+
+          {/* Comprovantes de pagamento */}
+          {mode === "edit" ? (
+            <ReceiptList receipts={receipts} onAdd={onAddReceipt} onEdit={onEditReceipt} />
+          ) : (
+            <span style={{ fontSize: "0.74rem", color: "var(--text-muted)" }}>
+              🧾 Depois de criar o pedido, você pode anexar comprovantes de pagamento a ele.
+            </span>
+          )}
 
           {/* Notas */}
           <div className="form-field">

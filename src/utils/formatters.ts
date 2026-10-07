@@ -13,6 +13,16 @@ export const fmt = (value: number | string | undefined): string =>
     currency: "BRL",
   }).format(Number(value) || 0);
 
+/** Só aceita links http(s) — bloqueia "javascript:" e afins em <a href> */
+export const safeHttpUrl = (url: string): string | null => {
+  try {
+    const u = new URL(url.trim());
+    return u.protocol === "http:" || u.protocol === "https:" ? u.href : null;
+  } catch {
+    return null;
+  }
+};
+
 export const fmtDate = (dateStr: string): string => {
   if (!dateStr) return "—";
   return new Date(dateStr + "T00:00:00").toLocaleDateString("pt-BR");

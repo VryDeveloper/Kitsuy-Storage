@@ -38,6 +38,13 @@ export interface Order {
   // Cliente
   clientId: string;
 
+  // Venda
+  sellerName: string;       // Vendedor que fez a venda
+
+  // Auditoria — preenchido automaticamente pelo banco a partir do login
+  createdBy?:     string;   // ID do usuário que criou o pedido
+  createdByName?: string;   // Nome (ou e-mail) de quem criou o pedido
+
   // Envio
   shippingStatus: ShippingStatus;
 
@@ -58,6 +65,27 @@ export interface Client {
   address: string;
   notes: string;
 }
+
+export interface PaymentReceipt {
+  id: string;
+  createdAt: string;
+
+  // Arquivo (bucket privado "payment-receipts")
+  filePath: string;
+  fileName: string;
+  fileType: string;        // application/pdf | image/png | image/jpeg
+
+  amount:      string;     // Valor pago (opcional)
+  paymentDate: string;     // Data do pagamento (opcional)
+  notes:       string;
+
+  clientIds: string[];     // Sempre pelo menos 1
+  orderIds:  string[];     // Pedidos cobertos por este comprovante
+
+  createdByName?: string;
+}
+
+export type ReceiptFormData = Omit<PaymentReceipt, "id" | "createdAt" | "filePath" | "fileName" | "fileType" | "createdByName">;
 
 export interface FinancialStats {
   totalOrders: number;
